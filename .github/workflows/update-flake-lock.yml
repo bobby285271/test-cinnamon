@@ -1,0 +1,25 @@
+name: update-flake-lock
+on:
+  workflow_dispatch: # allows manual triggering
+  schedule:
+    - cron: '30 4 * * *' # runs at 04:30 UTC every day
+
+jobs:
+  lockfile:
+    if: github.repository_owner == 'bobby285271'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v17
+      - name: Update flake.lock
+        run: nix flake update --commit-lock-file
+        shell: bash
+        env:
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: <github-actions[bot]@users.noreply.github.com>
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: <github-actions[bot]@users.noreply.github.com>
+      - name: Push changes
+        run: git push
