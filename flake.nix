@@ -53,6 +53,14 @@
                 user = nodes.machine.config.users.users.alice;
               in
               ''
+                def send_key(str):
+                  machine.send_key(str)
+                  machine.sleep(1)
+                
+                def send_chars(str):
+                  machine.send_chars(str)
+                  machine.sleep(2)
+
                 machine.wait_for_x()
                 machine.wait_for_file("${user.home}/.Xauthority")
                 machine.succeed("xauth merge ${user.home}/.Xauthority")
@@ -72,19 +80,12 @@
                   machine.execute("su - ${user.name} -c 'DISPLAY=:0 nemo >&2 &'")
                   machine.wait_for_window("nemo")
                   machine.wait_for_text("My Computer")
-                  machine.sleep(2)
-                  machine.send_key("ctrl-t") # new tab
-                  machine.sleep(2)
-                  machine.send_key("ctrl-d") # new bookmark
-                  machine.sleep(2)
-                  machine.send_key("ctrl-a") # select all
-                  machine.sleep(2)
-                  machine.send_key("ctrl-c") # copy
-                  machine.sleep(2)
-                  machine.send_key("ctrl-v") # paste
-                  machine.sleep(2)
+                  send_key("ctrl-t") # new tab
+                  send_key("ctrl-d") # new bookmark
+                  send_key("ctrl-a") # select all
+                  send_key("ctrl-c") # copy
+                  send_key("ctrl-v") # paste
                   machine.wait_for_text("(copy)")
-                  machine.sleep(2)
                   machine.screenshot("2_nemo")
                   machine.send_key('ctrl-q')
 
@@ -93,17 +94,11 @@
                   machine.wait_for_window("cinnamon-settings")
                   machine.wait_for_text("System Settings")
                   machine.screenshot("3_settings")
-                  machine.sleep(2)
-                  machine.send_chars("System Info")
-                  machine.sleep(2)
-                  machine.send_key("tab")
-                  machine.sleep(2)
-                  machine.send_key("down")
-                  machine.sleep(2)
-                  machine.send_key("\n")
-                  machine.sleep(2)
+                  send_chars("System Info")
+                  send_key("tab")
+                  send_key("down")
+                  send_key("\n")
                   machine.wait_for_text("Linux")
-                  machine.sleep(2)
                   machine.screenshot("4_info")
                   machine.send_key('ctrl-w')
               '';
