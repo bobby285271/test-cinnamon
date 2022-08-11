@@ -89,7 +89,7 @@
                   machine.screenshot("2_nemo")
                   machine.send_key('ctrl-q')
 
-                with subtest("Control Center"):
+                with subtest("Settings"):
                   machine.execute("su - ${user.name} -c 'DISPLAY=:0 cinnamon-settings >&2 &'")
                   machine.wait_for_window("cinnamon-settings")
                   machine.wait_for_text("System Settings")
@@ -100,7 +100,28 @@
                   send_key("\n")
                   machine.wait_for_text("Linux")
                   machine.screenshot("4_info")
-                  machine.send_key('ctrl-w')
+                  machine.send_key('alt-f4')
+
+                with subtest("Xed"):
+                  machine.execute("su - ${user.name} -c 'DISPLAY=:0 xed >&2 &'")
+                  machine.wait_for_window("xed")
+                  machine.wait_for_text("Unsaved Document")
+                  send_chars("Hello World")
+                  machine.screenshot("5_xed")
+                  send_key("ctrl-s")
+                  machine.wait_for_text('Save')
+                  send_chars("hello.txt")
+                  send_key("\n")
+                  machine.wait_for_file('/home/${user.name}/hello.txt')
+                  machine.send_key('ctrl-q')
+
+                with subtest("Lock"):
+                  machine.execute("su - ${user.name} -c 'DISPLAY=:0 cinnamon-screensaver-command -l >&2 &'")
+                  machine.sleep(5)
+                  send_chars("${user.password}")
+                  machine.screenshot("6_lock")
+                  send_key("\n")
+                  machine.wait_for_text("Computer")
               '';
           };
       });
