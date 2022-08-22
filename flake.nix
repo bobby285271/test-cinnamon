@@ -67,7 +67,7 @@
 
                 machine.wait_until_succeeds('pgrep -f cinnamon-session')
                 machine.wait_until_succeeds('pgrep -f cinnamon-launcher')
-                machine.wait_until_succeeds('pgrep -xf "cinnamon --replace"')
+                machine.wait_until_succeeds('pgrep -f "cinnamon --replace"')
                 machine.wait_until_succeeds('pgrep -f nemo-desktop')
                 machine.wait_until_succeeds('pgrep -f csd-media-keys')
 
